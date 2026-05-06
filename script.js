@@ -6294,11 +6294,35 @@ function initTable() {
 
     function showDetails(el) {
         const categoryVar = '--' + el.category.replace(/[\s,]+/g, '-').toLowerCase();
-        const categoryColor = getComputedStyle(document.documentElement).getPropertyValue(categoryVar).trim() || '#ffffff';
+        const rawColor = getComputedStyle(document.documentElement).getPropertyValue(categoryVar).trim() || '#cccccc';
+        const categoryColor = rawColor === '#cccccc' ? '#666666' : rawColor;
+        // Darken light colors for readability on white modal
+        const tempDiv = document.createElement('div');
+        tempDiv.style.color = categoryColor;
+        document.body.appendChild(tempDiv);
+        const rgb = getComputedStyle(tempDiv).color.match(/\d+/g).map(Number);
+        document.body.removeChild(tempDiv);
+        const luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
+        const modalColor = luminance > 0.6 ? `hsl(${rgbToHsl(rgb[0], rgb[1], rgb[2])[0]}, 70%, 35%)` : categoryColor;
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max === min) { h = s = 0; } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch(max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+        }
         modalBody.innerHTML = `
             <div class="modal-header">
-                <span class="symbol-large" style="color: ${categoryColor}">${el.symbol}</span>
-                <h2 style="color: ${categoryColor}">${el.name}</h2>
+                <span class="symbol-large" style="color: ${modalColor}">${el.symbol}</span>
+                <h2 style="color: ${modalColor}">${el.name}</h2>
             </div>
             <div class="info-grid">
                 <div class="info-item"><span class="info-label">Atomic Number:</span> ${el.number}</div>
@@ -6310,8 +6334,8 @@ function initTable() {
                 <div class="info-item"><span class="info-label">Discovered By:</span> ${el.discovered_by || 'Unknown'}</div>
             </div>
             <div class="summary">
-                <p>${el.summary}</p>
-                <a href="${el.source}" target="_blank" style="color: #00ffcc; text-decoration: none; font-size: 0.8rem;">Learn more on Wikipedia &rarr;</a>
+                <p>${el.name} (${el.symbol}) is a ${el.category} with atomic number ${el.number} and atomic mass ${el.atomic_mass}. It belongs to period ${el.period}, group ${el.group}, ${el.block}-block.${el.appearance ? ' Its appearance is ' + el.appearance + '.' : ''}${el.phase ? ' At standard conditions it exists as a ' + el.phase.toLowerCase() + '.' : ''}${el.discovered_by ? ' Discovered by ' + el.discovered_by + '.' : ''}${el.electronegativity_pauling ? ' Pauling electronegativity: ' + el.electronegativity_pauling + '.' : ''}</p>
+
             </div>
         `;
         modal.style.display = 'flex';

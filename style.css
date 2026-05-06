@@ -1,7 +1,7 @@
 :root {
-    --bg-color: #1a1a1a;
-    --text-color: #ffffff;
-    --cell-bg: #333;
+    --bg-color: #ffffff;
+    --text-color: #111111;
+    --cell-bg: #f0f0f0;
     --cell-hover: #444;
     --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     
@@ -56,14 +56,14 @@ h1 {
     border-radius: 4px;
     position: relative;
     font-size: 0.7rem;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(0,0,0,0.15);
 }
 
 .element:hover {
     transform: scale(1.1);
     z-index: 10;
     filter: brightness(1.4);
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 
 .element .number {
@@ -107,21 +107,22 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.8);
+    background-color: rgba(0,0,0,0.5);
     z-index: 100;
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
-    background-color: #222;
+    background-color: #f9f9f9;
     padding: 30px;
     border-radius: 12px;
     max-width: 600px;
     width: 90%;
     position: relative;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    border: 1px solid #444;
+    box-shadow: 0 0 30px rgba(0,0,0,0.2);
+    border: 1px solid #ccc;
+    color: #111;
 }
 
 .close-btn {
@@ -130,18 +131,18 @@ h1 {
     right: 20px;
     font-size: 24px;
     cursor: pointer;
-    color: #888;
+    color: #555;
 }
 
 .close-btn:hover {
-    color: white;
+    color: #111;
 }
 
 .modal-header {
     display: flex;
     align-items: baseline;
     gap: 15px;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -169,7 +170,7 @@ h1 {
 }
 
 .info-label {
-    color: #888;
+    color: #555;
     font-weight: bold;
     margin-right: 5px;
 }
@@ -177,7 +178,7 @@ h1 {
 .summary {
     line-height: 1.6;
     font-size: 0.95rem;
-    color: #ccc;
+    color: #333;
 }
 
 .legend {
